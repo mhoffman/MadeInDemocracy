@@ -18,6 +18,7 @@ import worldCountries from 'world-countries';
 import LocalizedStrings from 'react-native-localization'
 
 import rawData from './democracy_index_2015.js'
+import ituc_ranking from './ituc_data_2016.js'
 
 var I18n = require('react-native-i18n');
 I18n.fallbacks = true
@@ -42,16 +43,18 @@ worldCountries.map((country) => {
 });
 
 var DFLT = {
-            "rank": "???",
-            "id": "???",
-            "score": "0",
-            "electoralProcessandPluralism": "???",
-            "functioningOfgovernment": "???",
-            "politicalparticipation": "???",
-            "politicalculture": "???",
-            "civilliberties": "???",
-            "category": "???"
-        };
+    "rank": "???",
+    "id": "???",
+    "score": "0",
+    "electoralProcessandPluralism": "???",
+    "functioningOfgovernment": "???",
+    "politicalparticipation": "???",
+    "politicalculture": "???",
+    "civilliberties": "???",
+    "category": "???"
+};
+
+var ITUC_DFLT =  "???";
 
 var handler = {
     get: function(target, name) {
@@ -79,7 +82,7 @@ class MainView extends React.Component {
         super(props);
         this.state = {
             country: 'Democracy',
-            cca2: 'US',
+            cca2: 'NO',
 
         };
     }
@@ -96,6 +99,29 @@ class MainView extends React.Component {
         }else {
             return <Entypo name='emoji-sad'/>
         }
+    }
+    getITUCMeaning(score){
+        var meaning = '';
+        if(score==='???'){
+            meaning === ''
+        } else {
+            score = parseInt(score);
+            if(score===1){
+                meaning = 'Irregular violation of rights';
+            }else if (score ===2){
+                meaning = 'Repeated violation of rights';
+            }else if (score ===3){
+                meaning = 'Regular violation of rights';
+            }else if(score ==4){
+                meaning = 'Systematic violation of rights';
+            }else if(score === 5){
+                meaning = 'No guarantee of rights';
+            }else if(score === 6){
+                meaning = 'No guarantee of rights due to the breakdown of the rule of law';
+
+            }
+        }
+        return meaning
     }
     getColor(score){
         score = parseFloat(score.replace(/\*/gi, ''));
@@ -135,6 +161,13 @@ class MainView extends React.Component {
         } else {
             var elem = DFLT;
         }
+
+        if(this.props.ituc_ranking.hasOwnProperty(this.state.country)){
+            var ituc_elem = this.props.ituc_ranking[this.state.country]
+        } else {
+            var ituc_elem = ITUC_DFLT;
+        }
+
         return (
                 <View style={styles.container}>
                 <View
@@ -175,7 +208,12 @@ class MainView extends React.Component {
             <TouchableHighlight
             onPress={(index)=>Communications.web('https://en.wikipedia.org/wiki/Democracy_Index')}
         >
-            <Text>{this.state.country === 'Democracy' ? '': "   Source: Economist Intelligence Unit"</Text>
+            <Text>{this.state.country === 'Democracy' ? '': '   Source: Economist Intelligence Unit'}</Text>
+            </TouchableHighlight>
+            <TouchableHighlight
+            onPress={(index=>Communications.web('https://www.ituc-csi.org/ituc-global-rights-index-workers'))}
+        >
+            <Text>{this.state.country === 'Democracy' ? '': "ITUC Global Rights: " + ituc_elem + ' (' + this.getITUCMeaning(ituc_elem) + ')'}</Text>
             </TouchableHighlight>
             </View>
             );
@@ -184,7 +222,7 @@ class MainView extends React.Component {
 
 class App extends React.Component {
     render() {
-        return ( <MainView data={data}/>);
+        return ( <MainView data={data} ituc_ranking={ituc_ranking}/>);
     }
 }
 
