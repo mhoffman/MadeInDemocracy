@@ -1,6 +1,6 @@
 {
   "name": "MadeInDemocracy",
-  "description": "Rational: If you live in a democracy it is easy to believe that all you can do to influence the course of your country is go vote every 4 years or so. In practice you vote everyday when you make a purchase decision (e.g. buy shoes, clothing, electronics, cars, etc.)  you make an active decision to add some of your resource to a value chain that runs through the place where it says 'Made it ...'. Not always, but sometimes you have the choice between two similar products but very different political systems behind. Use this app to make informed decisions on the fly about who do you want to empower.",
+  "description": "Rational: If you live in a democracy it is easy to believe that all you can do to influence the course of your country is go vote every 4 years or so. In practice you vote everyday when you make a purchase decision (e.g. buy shoes, clothing, electronics, cars, etc.)  you make an active decision to add some of your resource to a value chain that runs through the place where it says 'Made it ...'. Not always, but sometimes you have the choice between two similar products but very different political systems behind it. Send your resources to a democracy and empower their representatives. Send it away and their decisions will become meaningless. Use this app to make more informed decisions on the fly about who do you want to empower.",
   "slug": "MadeInDemocracy",
   "privacy": "public",
   "sdkVersion": "12.0.0",
@@ -17,7 +17,10 @@
     "hideExponentText": false
   },
   "packagerOpts": {
-    "assetExts": ["ttf", "mp4"]
+    "assetExts": [
+      "ttf",
+      "mp4"
+    ]
   },
   "ios": {
     "supportsTablet": true

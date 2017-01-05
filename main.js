@@ -175,7 +175,7 @@ class MainView extends React.Component {
             <TouchableHighlight
             onPress={(index)=>Communications.web('https://en.wikipedia.org/wiki/Democracy_Index')}
         >
-            <Text>{this.state.country === 'Democracy' ? '': "   Source: Democracy Index " + interfaceLanguage}</Text>
+            <Text>{this.state.country === 'Democracy' ? '': "   Source: Economist Intelligence Unit"</Text>
             </TouchableHighlight>
             </View>
             );
