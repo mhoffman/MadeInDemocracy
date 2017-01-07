@@ -139,20 +139,21 @@ class MainView extends React.Component {
             }
         return color;
     }
-    getVerdict(score){
+    getVerdict(score, ituc_elem){
         score = parseFloat(score.replace(/\*/gi, ''));
-        if(score>=8){
+        ituc_elem = parseFloat(ituc_elem)
+        if(score>=8 && ituc_elem > 4){
             return 'Go for it!'
-        }else if(score>=6){
+        }else if(score>=6 && ituc_elem > 4){
             return 'Sounds good.'
-        }else if(score>=5){
+        }else if(score>=5 && ituc_elem > 4){
             return 'Probably okay'
         }else if(score>=4){
             return 'Proceed with caution ...'
         }else if(score==0){
-            return 'No data availaible'
+            return 'No data available'
         }else {
-            return 'Try to avoid.'
+            return 'Look for alternatives.'
         }
     }
     render(){
@@ -197,7 +198,7 @@ class MainView extends React.Component {
                     })}
                     </Picker> */}
         </View>
-            <Text>{this.state.country === 'Democracy' ? '': "Recommendation: " + this.getVerdict(elem['score'])}
+            <Text>{this.state.country === 'Democracy' ? '': "Recommendation: " + this.getVerdict(elem['score'], ituc_elem)}
         </Text>
             <Text>{this.state.country === 'Democracy' ? '': "Overall score: " + elem['score']}</Text>
             <Text>{this.state.country === 'Democracy' ? '': "   Electoral Process and Pluralism: " + elem['electoralProcessandPluralism']}</Text>
