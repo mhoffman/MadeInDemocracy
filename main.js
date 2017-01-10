@@ -19,6 +19,7 @@ import LocalizedStrings from 'react-native-localization'
 
 import rawData from './democracy_index_2015.js'
 import ituc_ranking from './ituc_data_2016.js'
+import fop_data from './fop_2016.js'
 
 var I18n = require('react-native-i18n');
 I18n.fallbacks = true
@@ -42,6 +43,30 @@ worldCountries.map((country) => {
     cca2Name[country.cca2] = country.name.common
 });
 
+const styles = StyleSheet.create({
+    container: {
+        padding: 24,
+        paddingTop: 50,
+        flex: 1,
+        backgroundColor: '#fff',
+    },
+    p: {
+        fontSize: 14,
+    },
+    expl: {
+        fontSize: 12,
+        color: '#666666',
+        fontStyle: 'italic',
+        marginTop: 5,
+    },
+    h2: {
+        fontSize: 20,
+        alignSelf: 'center',
+        marginTop: 10,
+        marginBottom: 10,
+    }
+});
+
 var DFLT = {
     "rank": "???",
     "id": "???",
@@ -55,6 +80,7 @@ var DFLT = {
 };
 
 var ITUC_DFLT =  "???";
+var FOP_DFLT =  "???";
 
 var handler = {
     get: function(target, name) {
@@ -141,12 +167,15 @@ class MainView extends React.Component {
     }
     getVerdict(score, ituc_elem){
         score = parseFloat(score.replace(/\*/gi, ''));
-        ituc_elem = parseFloat(ituc_elem)
-        if(score>=8 && ituc_elem > 4){
+        ituc_elem = parseFloat(ituc_elem);
+
+        console.log(score);
+        console.log(ituc_elem);
+        if(score>=8 && ituc_elem < 4){
             return 'Go for it!'
-        }else if(score>=6 && ituc_elem > 4){
+        }else if(score>=6 && ituc_elem < 4){
             return 'Sounds good.'
-        }else if(score>=5 && ituc_elem > 4){
+        }else if(score>=5 && ituc_elem < 4){
             return 'Probably okay'
         }else if(score>=4){
             return 'Proceed with caution ...'
@@ -169,6 +198,12 @@ class MainView extends React.Component {
             var ituc_elem = ITUC_DFLT;
         }
 
+        if(this.props.fop_data.hasOwnProperty(this.state.country)){
+            var fop_elem = this.props.fop_data[this.state.country]
+        } else {
+            var fop_elem = FOP_DFLT;
+        }
+
         return (
                 <View style={styles.container}>
                 <View
@@ -176,64 +211,70 @@ class MainView extends React.Component {
                     backgroundColor: this.state.country === 'Democracy'? 'white' : this.getColor(elem['score'])
                 }}
                 >
-                <ReactNative.Text>{I18n.t('madeIn')} {this.state.country}</ReactNative.Text>
+                <ReactNative.Text style={styles.h2}>{I18n.t('madeIn')} {this.state.country}</ReactNative.Text>
                 </View>
                 <View
                 >
                 <CountryPicker
-                onChange={(value)=> { console.log(value); this.setState({country: cca2Name[value.cca2], cca2: value.cca2})}}
+                onChange={(value)=> { this.setState({country: cca2Name[value.cca2], cca2: value.cca2})}}
                 cca2={this.state.cca2}
                 translation={interfaceLanguage}
                 />
-                {/*
-                    <Picker
-                    selectedValue={this.state.country}
-                    onValueChange={(country) => this.setState({country})}
-                    >
-                    {Object.keys(this.props.data).sort().map((country, i) =>
-                    {
-                    return <Picker.Item
-                    key={i} label={country} value={country}
-                    />
-                    })}
-                    </Picker> */}
-        </View>
-            <Text>{this.state.country === 'Democracy' ? '': "Recommendation: " + this.getVerdict(elem['score'], ituc_elem)}
-        </Text>
-            <Text>{this.state.country === 'Democracy' ? '': "Overall score: " + elem['score']}</Text>
-            <Text>{this.state.country === 'Democracy' ? '': "   Electoral Process and Pluralism: " + elem['electoralProcessandPluralism']}</Text>
-            <Text>{this.state.country === 'Democracy' ? '': "   Functioning of Government: " + elem['functioningOfgovernment']}</Text>
-            <Text>{this.state.country === 'Democracy' ? '': "   Political Participation: " + elem['politicalparticipation']}</Text>
-            <Text>{this.state.country === 'Democracy' ? '': "   Civil Liberties: " + elem['civilliberties']}</Text>
-            <Text>{this.state.country === 'Democracy' ? '': "   Category: " + elem['category']}</Text>
-            <TouchableHighlight
-            onPress={(index)=>Communications.web('https://en.wikipedia.org/wiki/Democracy_Index')}
-        >
-            <Text>{this.state.country === 'Democracy' ? '': '   Source: Economist Intelligence Unit'}</Text>
-            </TouchableHighlight>
-            <TouchableHighlight
-            onPress={(index=>Communications.web('https://www.ituc-csi.org/ituc-global-rights-index-workers'))}
-        >
-            <Text>{this.state.country === 'Democracy' ? '': "ITUC Global Rights: " + ituc_elem + ' (' + this.getITUCMeaning(ituc_elem) + ')'}</Text>
-            </TouchableHighlight>
-            </View>
-            );
+                </View>
+                <Text style={styles.p}>{this.state.country === 'Democracy' ? '': "Recommendation: " + this.getVerdict(elem['score'], ituc_elem) + '\n'}
+                </Text>
+
+                <TouchableHighlight
+                onPress={(index=>Communications.web('http://www.eiu.com/public/topical_report.aspx?campaignid=DemocracyIndex2015'))}
+                >
+                    <View>
+                    <Text style={styles.h2}>{this.state.country === 'Democracy' ? '': 'Democracy'}</Text>
+                    <Text style={styles.p}>{this.state.country === 'Democracy' ? '': "Overall score: " + elem['score']}</Text>
+                    <Text style={styles.p}>{this.state.country === 'Democracy' ? '': "   Electoral Process and Pluralism: " + elem['electoralProcessandPluralism']}</Text>
+                    <Text style={styles.p}>{this.state.country === 'Democracy' ? '': "   Functioning of Government: " + elem['functioningOfgovernment']}</Text>
+                    <Text style={styles.p}>{this.state.country === 'Democracy' ? '': "   Political Participation: " + elem['politicalparticipation']}</Text>
+                    <Text style={styles.p}>{this.state.country === 'Democracy' ? '': "   Civil Liberties: " + elem['civilliberties']}</Text>
+                    <Text style={styles.p}>{this.state.country === 'Democracy' ? '': "   Category: " + elem['category']}</Text>
+                    <Text style={styles.expl}>{this.state.country === 'Democracy' ? '': '10: best, 0: worst'}</Text>
+                    </View>
+                    </TouchableHighlight>
+
+
+
+
+
+                    <TouchableHighlight
+                    onPress={(index=>Communications.web('https://www.ituc-csi.org/ituc-global-rights-index-workers'))}
+                >
+                    <View>
+                    <Text style={styles.h2}>{this.state.country === 'Democracy' ? '': 'Worker Rights'}</Text>
+
+                    <Text style={styles.p}>{this.state.country === 'Democracy' ? '': "\nITUC Global Rights: " + ituc_elem + ' (' + this.getITUCMeaning(ituc_elem) + ')'}</Text>
+                            <Text style={styles.expl}>{this.state.country === 'Democracy' ? '': '1: best, 6: worst'}</Text>
+                            </View>
+                            </TouchableHighlight>
+                            <TouchableHighlight
+                            onPress={(index=>Communications.web('https://rsf.org/en/ranking'))} >
+                            <View>
+                            <Text style={styles.h2}>{this.state.country === 'Democracy' ? '': 'Freedom of Press'}</Text>
+                            <Text style={styles.p}>{this.state.country === 'Democracy' ? '': "\nWorld Press Freedom Index: " + fop_elem}</Text>
+                            <Text style={styles.expl}>{this.state.country === 'Democracy' ? '': '0: best, 100: worst'}</Text>
+                            </View>
+                            </TouchableHighlight>
+                            </View>
+                            );
     }
 }
 
 class App extends React.Component {
     render() {
-        return ( <MainView data={data} ituc_ranking={ituc_ranking}/>);
+        return ( <MainView
+                data={data}
+                ituc_ranking={ituc_ranking}
+                fop_data={fop_data}
+                />);
     }
 }
 
-const styles = StyleSheet.create({
-    container: {
-        padding: 24,
-        paddingTop: 50,
-        flex: 1,
-        backgroundColor: '#fff',
-    },
-});
 
 Exponent.registerRootComponent(App);
