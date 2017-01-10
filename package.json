@@ -1,0 +1,21 @@
+{
+  "name": "MadeInDemocracy",
+  "version": "0.0.0",
+  "description": "Hello Exponent!",
+  "author": null,
+  "private": true,
+  "main": "main.js",
+  "dependencies": {
+    "@exponent/vector-icons": "~2.0.3",
+    "exponent": "~12.0.3",
+    "proxy-polyfill": "^0.1.6",
+    "react": "~15.3.2",
+    "react-native": "git+https://github.com/exponentjs/react-native#sdk-12.0.0",
+    "react-native-communications": "^2.1.4",
+    "react-native-country-picker-modal": "^0.2.7",
+    "react-native-i18n": "^0.1.1",
+    "react-native-localization": "^0.1.22",
+    "world-countries": "^1.8.1"
+  },
+  "devDependencies": {}
+}
