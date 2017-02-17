@@ -1,0 +1,5 @@
+The idea centers around an app (mobile for in store shopper, web or browser plugin) that gives shoppers guidance for how to avoid sponsoring non-democratic regimes with everyday shopping decisions. A simple prototype shows democracy index (as stated be Economist Intelligence Unit), freedom-of-press index, and a worker's rights index.
+
+Rationale: If you live in a democracy it is easy to believe that all you can do to influence the course of your country is go vote every 4 years or so. In practice you vote everyday when you make a purchase (e.g. buy shoes, clothing, electronics, cars, etc.) you make an active decision to add some of your resources to a value chain that runs through the place where it says 'Made in ...'. Not always, but sometimes you have the choice between two or more similar products but very different political systems behind it. Send your resources to a democracy and empower their representatives. Send it away and their decisions will become meaningless.
+
+Further directions of development could be combination with bar code scanner and product databases that direct shoppers to more 'democratic' alternatives.
