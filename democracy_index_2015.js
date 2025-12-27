@@ -1,4 +1,4 @@
-module.exports = {
+var democracyData = {
     "Norway": {
         "rank": 1,
         "id": "Norway",

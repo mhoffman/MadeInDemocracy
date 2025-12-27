@@ -1,4 +1,4 @@
-module.exports = {
+var fopData = {
     "Afghanistan": 37.75,
     "Albania": 29.92,
     "Algeria": 41.69,

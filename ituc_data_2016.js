@@ -1,5 +1,5 @@
 //from https://www.ituc-csi.org/IMG/pdf/survey_ra_2016_eng.pdf
-module.exports = {
+var itucData = {
     "Albania": "3",
     "Algeria": "5",
     "Angola": "3",
