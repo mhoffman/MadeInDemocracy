@@ -43,9 +43,10 @@ function getITUCColor(score) {
 function getPressColor(score) {
     if (score === '???') return 'bg-grey';
     const numScore = parseFloat(score);
-    if (numScore < 15) return 'bg-green';
-    if (numScore < 25) return 'bg-yellow';
-    if (numScore < 35) return 'bg-orange';
+    // New scale: 100 = best (most free), 0 = worst (least free)
+    if (numScore >= 75) return 'bg-green';
+    if (numScore >= 50) return 'bg-yellow';
+    if (numScore >= 25) return 'bg-orange';
     return 'bg-red';
 }
 
@@ -85,6 +86,39 @@ function getITUCMeaning(score) {
 
 // Main app
 let currentCountry = 'Democracy';
+let detectedCountry = null;
+
+// Detect user's country
+async function detectCountry() {
+    try {
+        // Try free IP geolocation API
+        const response = await fetch('https://ipapi.co/json/');
+        const data = await response.json();
+
+        if (data.country_name) {
+            // Map common variations to match our data
+            const countryMap = {
+                'United States': 'United States of America',
+                'South Korea': 'Korea (Republic of)',
+                'North Korea': 'Democratic People\'s Republic of Korea',
+                'Russia': 'Russian Federation',
+                'Czech Republic': 'Czechia',
+                // Add more mappings as needed
+            };
+
+            detectedCountry = countryMap[data.country_name] || data.country_name;
+
+            // Check if country exists in our data
+            if (democracyData.hasOwnProperty(detectedCountry)) {
+                currentCountry = detectedCountry;
+                render();
+            }
+        }
+    } catch (error) {
+        // Silently fail - user can still select manually
+        console.log('Could not detect country:', error);
+    }
+}
 
 function render() {
     const root = document.getElementById('root');
@@ -119,9 +153,9 @@ function render() {
                 </div>
 
                 <div class="indices-grid">
-                    <a href="http://www.eiu.com/public/topical_report.aspx?campaignid=DemocracyIndex2015" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;">
+                    <a href="http://www.eiu.com/public/topical_report.aspx?campaignid=DemocracyIndex2024" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;">
                         <div class="section ${getDemocracyColor(elem.score)}">
-                            <h2>Democracy Index (2015)</h2>
+                            <h2>Democracy Index (2024)</h2>
                             <p><strong>Overall Score:</strong> ${elem.score}</p>
                             <p>Electoral Process: ${elem.electoralProcessandPluralism}</p>
                             <p>Government Function: ${elem.functioningOfgovernment}</p>
@@ -134,7 +168,7 @@ function render() {
 
                     <a href="https://www.ituc-csi.org/ituc-global-rights-index-workers" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;">
                         <div class="section ${getITUCColor(itucElem)}">
-                            <h2>Worker Rights (2016)</h2>
+                            <h2>Worker Rights (2025)</h2>
                             <p><strong>ITUC Global Rights:</strong> ${itucElem}</p>
                             <p>${getITUCMeaning(itucElem)}</p>
                             <p class="explanation">International Trade Union Confederation • 1: best, 6: worst</p>
@@ -143,9 +177,9 @@ function render() {
 
                     <a href="https://rsf.org/en/ranking" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;">
                         <div class="section ${getPressColor(fopElem)}">
-                            <h2>Press Freedom (2016)</h2>
+                            <h2>Press Freedom (2025)</h2>
                             <p><strong>World Press Freedom Index:</strong> ${fopElem}</p>
-                            <p class="explanation">Reporters Without Borders • 0: best, 100: worst</p>
+                            <p class="explanation">Reporters Without Borders • 100: best, 0: worst</p>
                         </div>
                     </a>
 
@@ -173,7 +207,11 @@ function render() {
 
 // Initialize when DOM is ready
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', render);
+    document.addEventListener('DOMContentLoaded', () => {
+        render();
+        detectCountry(); // Auto-detect country after initial render
+    });
 } else {
     render();
+    detectCountry();
 }
