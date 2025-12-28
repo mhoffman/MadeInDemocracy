@@ -26,7 +26,8 @@ def extract_press_freedom_index():
     # Extract country names and scores using regex
     # Pattern looks for country links followed by scores after <br />
     # Format: <a>Country</a></span></td><td>(...)<br />SCORE
-    pattern = r'<a href="/wiki/([^"]+)" title="([^"]+)">([^<]+)</a>.*?</td>\s*<td[^>]*>\([0-9]+\)<br />([0-9.]+)'
+    # Limit match to max 500 chars between link and score to avoid matching intro text
+    pattern = r'<a href="/wiki/([^"]+)" title="([^"]+)">([^<]+)</a>.{0,500}?</td>\s*<td[^>]*>\([0-9]+\)<br />([0-9.]+)'
     matches = re.findall(pattern, content, re.DOTALL)
 
     fop_data = {}
@@ -42,6 +43,8 @@ def extract_press_freedom_index():
                 # Normalize country names for consistency
                 if country == "United States":
                     country = "United States of America"
+                elif country == "Cape Verde":
+                    country = "Cabo Verde"
 
                 if country not in fop_data:
                     fop_data[country] = score_num

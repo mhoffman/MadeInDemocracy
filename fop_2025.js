@@ -5,7 +5,7 @@
 // Download date: 2025-12-27
 // Scale: 0-100 (100 = best/most free, 0 = worst/least free)
 // Note: Scale was inverted in recent years - higher score now means MORE press freedom
-// Total countries: 178
+// Total countries: 179
 
 var fopData = {
     "Afghanistan": 17.88,
@@ -129,6 +129,7 @@ var fopData = {
     "North Korea": 12.64,
     "North Macedonia": 70.44,
     "Northern Cyprus": 54.84,
+    "Norway": 92.31,
     "Oman": 42.29,
     "Pakistan": 29.62,
     "Palestine": 27.41,
