@@ -60,6 +60,11 @@ def convert_csv_to_js(input_csv='cpi_2024_source.csv', output_js='cpi_2024.js'):
             # Read data
             for row in reader:
                 country = row[country_col].strip()
+
+                # Normalize country names for consistency
+                if country == "United States":
+                    country = "United States of America"
+
                 try:
                     score = float(row[score_col])
                     cpi_data[country] = score

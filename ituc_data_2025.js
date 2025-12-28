@@ -4,7 +4,7 @@
 // PDF: en__global_right_index_2025__final_web.pdf
 // Download date: 2025-12-27
 // Scale: 1-6 (1 = best, 6 = worst) + 5+ for rights violations due to breakdown of rule of law
-// Total countries: 153
+// Total countries: 150
 
 var itucData = {
     "Afghanistan": "5+",
@@ -28,7 +28,7 @@ var itucData = {
     "Botswana": "4",
     "Brazil": "4",
     "Bulgaria": "3",
-    "Burkina": "4",
+    "Burkina Faso": "4",
     "Burundi": "5+",
     "Cambodia": "5",
     "Cameroon": "4",
@@ -41,7 +41,7 @@ var itucData = {
     "Congo": "4",
     "Costa Rica": "4",
     "Croatia": "2",
-    "Czechia": "2",
+    "Czech Republic": "2",
     "Côte": "3",
     "Denmark": "1",
     "Djibouti": "4",
@@ -53,8 +53,6 @@ var itucData = {
     "Estonia": "2",
     "Eswatini": "5",
     "Ethiopia": "4",
-    "Faso": "4",
-    "Federation": "5",
     "Fiji": "4",
     "Finland": "2",
     "France": "2",
@@ -83,7 +81,6 @@ var itucData = {
     "Jordan": "5",
     "Kazakhstan": "5",
     "Kenya": "4",
-    "Korea": "5",
     "Kuwait": "5",
     "Kyrgyzstan": "5",
     "Laos": "5",
@@ -123,9 +120,8 @@ var itucData = {
     "Poland": "3",
     "Portugal": "2",
     "Qatar": "5",
-    "Republic": "4",
     "Romania": "3",
-    "Russian": "5",
+    "Russia": "5",
     "Rwanda": "3",
     "Saudi Arabia": "5",
     "Senegal": "4",
@@ -135,6 +131,7 @@ var itucData = {
     "Slovakia": "2",
     "Somalia": "5+",
     "South Africa": "3",
+    "South Korea": "5",
     "South Sudan": "5+",
     "Spain": "2",
     "Sri Lanka": "4",

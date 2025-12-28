@@ -69,7 +69,8 @@ def extract_ituc_index():
                             if two_word in ["United States", "United Kingdom", "United Arab", "Costa Rica",
                                             "El Salvador", "Saudi Arabia", "New Zealand", "South Africa",
                                             "South Sudan", "North Macedonia", "Central African", "Dominican Republic",
-                                            "Trinidad and", "Sierra Leone", "Sri Lanka", "Hong Kong", "Bosnia and"]:
+                                            "Trinidad and", "Sierra Leone", "Sri Lanka", "Hong Kong", "Bosnia and",
+                                            "Burkina Faso", "Czech Republic", "Russian Federation", "South Korea"]:
                                 if i + 2 < len(words):
                                     if two_word == "United States" and words[i+2] == "of":
                                         country = "United States of America"
@@ -89,11 +90,33 @@ def extract_ituc_index():
                                     elif two_word == "Bosnia and" and words[i+2] == "Herzegovina":
                                         country = "Bosnia and Herzegovina"
                                         i += 3
+                                    elif two_word == "Burkina Faso":
+                                        country = "Burkina Faso"
+                                        i += 2
+                                    elif two_word == "Czech Republic":
+                                        country = "Czech Republic"
+                                        i += 2
+                                    elif two_word == "Russian Federation":
+                                        country = "Russia"  # Normalize to "Russia"
+                                        i += 2
+                                    elif two_word == "South Korea":
+                                        country = "South Korea"
+                                        i += 2
                                     else:
                                         country = two_word
                                         i += 2
                                 else:
-                                    country = two_word
+                                    # Handle two-word patterns at end of list
+                                    if two_word == "Burkina Faso":
+                                        country = "Burkina Faso"
+                                    elif two_word == "Czech Republic":
+                                        country = "Czech Republic"
+                                    elif two_word == "Russian Federation":
+                                        country = "Russia"
+                                    elif two_word == "South Korea":
+                                        country = "South Korea"
+                                    else:
+                                        country = two_word
                                     i += 2
 
                                 if country not in ituc_data:
@@ -102,10 +125,20 @@ def extract_ituc_index():
 
                         # Single word country
                         if len(word) > 2 and word[0].isupper():
-                            # Skip page numbers and obvious non-countries
-                            if not word.isdigit() and word not in ['Rating', 'THE', 'RIGHTS', 'INDEX']:
-                                if word not in ituc_data:
-                                    ituc_data[word] = current_rating
+                            # Skip page numbers, obvious non-countries, and fragments of multi-word names
+                            # Note: "Czechia" is valid (official short name for Czech Republic)
+                            # Note: "Korea" likely refers to South Korea in this context
+                            skip_words = ['Rating', 'THE', 'RIGHTS', 'INDEX', 'Federation', 'Republic', 'Burkina', 'Faso', 'Russian']
+                            if not word.isdigit() and word not in skip_words:
+                                # Normalize specific single-word countries
+                                country = word
+                                if word == "Czechia":
+                                    country = "Czech Republic"
+                                elif word == "Korea":
+                                    country = "South Korea"
+
+                                if country not in ituc_data:
+                                    ituc_data[country] = current_rating
 
                         i += 1
 

@@ -88,6 +88,45 @@ function getITUCMeaning(score) {
 let currentCountry = 'Democracy';
 let detectedCountry = null;
 
+// Parse URL parameter for country selection
+function getCountryFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    const countryParam = params.get('country');
+
+    if (!countryParam) return null;
+
+    // Decode URL-encoded country name (handles spaces and special chars)
+    const decodedCountry = decodeURIComponent(countryParam);
+
+    // Validate against available countries
+    if (democracyData.hasOwnProperty(decodedCountry)) {
+        return decodedCountry;
+    }
+
+    // Case-insensitive fallback for user-friendly URLs
+    const countries = Object.keys(democracyData);
+    const matchedCountry = countries.find(
+        c => c.toLowerCase() === decodedCountry.toLowerCase()
+    );
+
+    return matchedCountry || null;
+}
+
+// Update URL to reflect current country selection
+function updateURL(country) {
+    if (country === 'Democracy') {
+        // Remove country parameter for default state
+        const url = new URL(window.location);
+        url.searchParams.delete('country');
+        window.history.replaceState({}, '', url);
+    } else {
+        // Set country parameter
+        const url = new URL(window.location);
+        url.searchParams.set('country', country);
+        window.history.replaceState({}, '', url);
+    }
+}
+
 // Detect user's country
 async function detectCountry() {
     try {
@@ -97,13 +136,13 @@ async function detectCountry() {
 
         if (data.country_name) {
             // Map common variations to match our data
+            // Note: Our data uses "United States of America", "South Korea", "Czech Republic", "Russia"
             const countryMap = {
                 'United States': 'United States of America',
-                'South Korea': 'Korea (Republic of)',
-                'North Korea': 'Democratic People\'s Republic of Korea',
-                'Russia': 'Russian Federation',
-                'Czech Republic': 'Czechia',
-                // Add more mappings as needed
+                // Most other countries match as-is, including:
+                // - South Korea (already correct)
+                // - Czech Republic (already correct)
+                // - Russia (already correct)
             };
 
             detectedCountry = countryMap[data.country_name] || data.country_name;
@@ -111,6 +150,7 @@ async function detectCountry() {
             // Check if country exists in our data
             if (democracyData.hasOwnProperty(detectedCountry)) {
                 currentCountry = detectedCountry;
+                updateURL(currentCountry); // Update URL when geolocation succeeds
                 render();
             }
         }
@@ -200,18 +240,30 @@ function render() {
     if (select) {
         select.addEventListener('change', (e) => {
             currentCountry = e.target.value;
+            updateURL(currentCountry); // Update URL for shareability
             render();
         });
     }
 }
 
+// Initialize application
+function initializeApp() {
+    // Priority 1: URL parameter
+    const urlCountry = getCountryFromURL();
+    if (urlCountry) {
+        currentCountry = urlCountry;
+        render();
+        return; // Don't run geolocation if URL specifies country
+    }
+
+    // Priority 2: Default + Geolocation
+    render(); // Show default "Democracy" state
+    detectCountry(); // Try to auto-detect (will re-render if successful)
+}
+
 // Initialize when DOM is ready
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-        render();
-        detectCountry(); // Auto-detect country after initial render
-    });
+    document.addEventListener('DOMContentLoaded', initializeApp);
 } else {
-    render();
-    detectCountry();
+    initializeApp();
 }

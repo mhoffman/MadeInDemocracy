@@ -39,6 +39,10 @@ def extract_press_freedom_index():
             score_num = float(score)
             # Validate score range (0-100) and country name
             if 0 <= score_num <= 100 and len(country) > 2 and not country.replace('.', '').isdigit():
+                # Normalize country names for consistency
+                if country == "United States":
+                    country = "United States of America"
+
                 if country not in fop_data:
                     fop_data[country] = score_num
         except ValueError:
