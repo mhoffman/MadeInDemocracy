@@ -12,7 +12,7 @@ The idea centers around an app (mobile for in store shopper, web or browser plug
 
 ## Live Demo
 
-Visit: [https://mhoffman.github.io/MadeInDemocracy/](https://mhoffman.github.io/MadeInDemocracy/index-minimal.html)
+Visit: [https://mhoffman.github.io/MadeInDemocracy](https://mhoffman.github.io/MadeInDemocracy)
 
 ## Current Features
 
