@@ -188,10 +188,6 @@ function render() {
             </select>
 
             ${showData ? `
-                <div class="recommendation">
-                    Recommendation: ${getVerdict(elem.score, itucElem)}
-                </div>
-
                 <div class="indices-grid">
                     <a href="http://www.eiu.com/public/topical_report.aspx?campaignid=DemocracyIndex2024" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;">
                         <div class="section ${getDemocracyColor(elem.score)}">
